@@ -20,6 +20,8 @@ import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { OutlinePass } from "three/addons/postprocessing/OutlinePass.js";
+
+import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
 // 组件
 import ProgressBar from "../components/progressBar.vue";
 // class
@@ -68,7 +70,7 @@ onMounted(() => {
     if (intersects.length > 0) {
       // 选中模型的第一个模型，设置为红色
       // intersects[0].object.material.color.set(0xff0000);
-      // outlinePass.selectedObjects = [intersects[0].object];
+      outlinePass.selectedObjects = [intersects[0].object];
     } else {
     }
   });
@@ -123,17 +125,21 @@ function init() {
   renderer = new THREE.WebGLRenderer({
     antialias: true, //开启优化锯齿
   });
+  renderer.outputEncoding = THREE.sRGBEncoding;
   renderer.setSize(canvasWidth, canvasHeight);
   // 高光
-  // composer = new EffectComposer(renderer);
-  // renderPass = new RenderPass(scene, camera);
-  // outlinePass = new OutlinePass(
-  //   new THREE.Vector2(canvasWidth, canvasHeight),
-  //   scene,
-  //   camera
-  // );
-  // composer.addPass(renderPass);
-  // composer.addPass(outlinePass);
+  composer = new EffectComposer(renderer);
+  renderPass = new RenderPass(scene, camera);
+  outlinePass = new OutlinePass(
+    new THREE.Vector2(canvasWidth, canvasHeight),
+    scene,
+    camera
+  );
+
+  const outputPass = new OutputPass();
+  composer.addPass(renderPass);
+  composer.addPass(outlinePass);
+  composer.addPass(outputPass);
   // 相机轨道控制器
   cameraControls = new OrbitControls(camera, renderer.domElement);
   cameraControls.target.set(0, 0, 0);
@@ -146,8 +152,8 @@ function animate() {
     fence.update();
   }
 
-  renderer.render(scene, camera);
-  // composer.render();
+  // renderer.render(scene, camera);
+  composer.render();
   requestAnimationFrame(animate);
 }
 // 开启电子围栏
