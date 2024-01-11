@@ -38,6 +38,7 @@ watch(
   width: 100%;
   height: 100%;
   background: linear-gradient(to bottom, #a4d3ee, #b2dfee);
+  z-index: 99;
   .line {
     position: absolute;
     top: 50%;
