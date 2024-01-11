@@ -1,6 +1,6 @@
 import { createApp } from "vue";
 import "./assets/main.css";
-
+import router from "./工厂模型案例/router/index";
 // import App from "./01-three三要素场景，相机，渲染器.vue";
 // import App from "./02-坐标.vue";
 // import App from "./03-GUI-点光源-帧率-循环渲染-相机控制.vue";
@@ -25,6 +25,9 @@ import "./assets/main.css";
 // import App from "./21-扩散波效果.vue";
 // import App from "./22-旋转棱锥效果.vue";
 // import App from "./23-信号波.vue";
-import App from "./24-渐变墙.vue";
+// import App from "./24-渐变墙.vue";
+import App from "./工厂模型案例/app.vue";
 
-createApp(App).mount("#app");
+const app = createApp(App);
+app.use(router);
+app.mount("#app");

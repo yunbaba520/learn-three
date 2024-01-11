@@ -52,7 +52,6 @@ function addModel() {
   const geometry = new THREE.PlaneGeometry(150, 30);
   const material = new THREE.MeshBasicMaterial({
     color: 0x00dfdf,
-    side: THREE.DoubleSide,
     transparent: true,
     side: THREE.DoubleSide, //两面可见
     map: new THREE.TextureLoader().load("../src/assets/img/渐变墙-墙体.png"),
