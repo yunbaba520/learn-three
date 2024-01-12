@@ -4,7 +4,9 @@
       <span class="btn" @click="openFence">{{
         isFence ? "关闭电子围栏" : "开启电子围栏"
       }}</span>
-      <span class="btn" @click="flyMain">首页</span>
+      <span class="btn" @click="flyMain">首页视角</span>
+      <span class="btn" @click="inWarehouse">仓库内部</span>
+      <span class="btn" @click="seeFire">查看消防设备</span>
     </div>
     <div ref="canvesRef" class="canvas-wrap"></div>
     <ProgressBar v-model="progress"></ProgressBar>
@@ -36,6 +38,8 @@ import InfoBox from "../components/infoBox.vue";
 // class
 import Fence from "../three/fence";
 import createLabel from "../three/createLabel";
+import initFireModel from "../three/addFireModel";
+
 const canvesRef = ref(null);
 const canvasWidth = window.innerWidth;
 const canvasHeight = window.innerHeight;
@@ -89,6 +93,7 @@ function init() {
       console.log(err);
     }
   );
+  initFireModel(scene);
   // 相机
   camera = new THREE.PerspectiveCamera(
     75,
@@ -226,7 +231,7 @@ function openFence() {
 }
 // 模型add标签
 function modelAddTab() {
-  scene.add(createLabel(new THREE.Vector3(10, 13, -10), "工厂"));
+  scene.add(createLabel(new THREE.Vector3(10, 13, -10), "仓库"));
   scene.add(createLabel(new THREE.Vector3(0, 13, 38), "设备A"));
   scene.add(createLabel(new THREE.Vector3(18, 13, 38), "设备B"));
 
@@ -288,6 +293,22 @@ function handleClose() {
     flyMain();
   }
 }
+
+function inWarehouse() {
+  console.log(model);
+
+  const top = model.scene.getObjectByName("仓库");
+  top.traverse(function (obj) {
+    if (obj.isMesh) {
+      console.log(obj);
+      obj.material.transparent = true;
+      obj.material.opacity = 0.1;
+    }
+  });
+  // console.log(top);
+  // // top.visible = false;
+}
+function seeFire() {}
 </script>
 
 <style lang="scss" scoped>
