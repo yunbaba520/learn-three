@@ -11,6 +11,9 @@
       <span class="btn" @click="seeFire">{{
         isAnimationPyramid ? "关闭消防设备" : "查看消防设备"
       }}</span>
+      <span class="btn" @click="seeDevice">{{
+        isSeeDevice ? "关闭设备视图" : "查看设备视图"
+      }}</span>
       <span class="btn" @click="changeCarStatus">{{
         isCarRun ? "关闭货车运动" : "开始货车运动"
       }}</span>
@@ -47,6 +50,7 @@ import Fence from "../three/fence";
 import createLabel from "../three/createLabel";
 import FireModel from "../three/addFireModel";
 import Pyramid from "../three/pyramid";
+import DeviceModel from "../three/addDeviceModel";
 
 const canvesRef = ref(null);
 const canvasWidth = window.innerWidth;
@@ -73,6 +77,7 @@ let car;
 let carPath;
 let carI = 0;
 const isCarRun = ref(false);
+const isSeeDevice = ref(false);
 const progress = ref(0); // 模型加载进度百分比0-1
 const infoBoxRef = ref(null);
 let infoBox;
@@ -118,7 +123,10 @@ function init() {
   ]);
   const fire = fireModel.init();
   scene.add(fire);
-
+  // 设备
+  const deviceModel = new DeviceModel();
+  const deviceMesh = deviceModel.init();
+  scene.add(deviceMesh);
   // 相机
   camera = new THREE.PerspectiveCamera(
     75,
@@ -339,7 +347,6 @@ function inWarehouse() {
       obj.material.opacity = isOpcityWarehouse.value ? 0.3 : 1;
     }
   });
-  flyMain();
 }
 function seeFire() {
   inWarehouse();
@@ -408,6 +415,17 @@ function carRun() {
   }
   car.position.copy(carPath[carI]);
   car.lookAt(carPath[carI + 1]);
+}
+function seeDevice() {
+  // console.log(camera);
+  if (!isSeeDevice.value) {
+    cameraFly(new THREE.Vector3(-26, 54, -19), new THREE.Vector3(20, 0, -20));
+  } else {
+    flyMain();
+  }
+  inWarehouse();
+
+  isSeeDevice.value = !isSeeDevice.value;
 }
 </script>
 
