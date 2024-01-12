@@ -5,8 +5,12 @@
         isFence ? "关闭电子围栏" : "开启电子围栏"
       }}</span>
       <span class="btn" @click="flyMain">首页视角</span>
-      <span class="btn" @click="inWarehouse">仓库内部</span>
-      <span class="btn" @click="seeFire">查看消防设备</span>
+      <span class="btn" @click="inWarehouse">{{
+        isOpcityWarehouse ? "关闭仓库内部" : "查看仓库内部"
+      }}</span>
+      <span class="btn" @click="seeFire">{{
+        isAnimationPyramid ? "关闭消防设备" : "查看消防设备"
+      }}</span>
     </div>
     <div ref="canvesRef" class="canvas-wrap"></div>
     <ProgressBar v-model="progress"></ProgressBar>
@@ -38,7 +42,8 @@ import InfoBox from "../components/infoBox.vue";
 // class
 import Fence from "../three/fence";
 import createLabel from "../three/createLabel";
-import initFireModel from "../three/addFireModel";
+import FireModel from "../three/addFireModel";
+import Pyramid from "../three/pyramid";
 
 const canvesRef = ref(null);
 const canvasWidth = window.innerWidth;
@@ -58,7 +63,9 @@ let labelRenderer;
 // 效果
 let fence;
 const isFence = ref(false);
-
+let p1, p2, p3, p4;
+const isAnimationPyramid = ref(false); // 是否显示选择棱锥
+const isOpcityWarehouse = ref(false); // 仓库是否透明
 const progress = ref(0); // 模型加载进度百分比0-1
 const infoBoxRef = ref(null);
 let infoBox;
@@ -93,7 +100,15 @@ function init() {
       console.log(err);
     }
   );
-  initFireModel(scene);
+  // 加载消防设备
+  const fireModel = new FireModel([
+    new THREE.Vector3(-6, 1, 14),
+    new THREE.Vector3(24, 1, -20),
+    new THREE.Vector3(-10, 1, -70),
+    new THREE.Vector3(-24, 1, 68),
+  ]);
+  const fire = fireModel.init();
+  scene.add(fire);
   // 相机
   camera = new THREE.PerspectiveCamera(
     75,
@@ -151,7 +166,12 @@ function animate() {
   if (fence) {
     fence.update();
   }
-
+  if (isAnimationPyramid.value) {
+    p1.update();
+    p2.update();
+    p3.update();
+    p4.update();
+  }
   // renderer.render(scene, camera);
   labelRenderer.render(scene, camera);
 
@@ -295,20 +315,48 @@ function handleClose() {
 }
 
 function inWarehouse() {
-  console.log(model);
+  isOpcityWarehouse.value = !isOpcityWarehouse.value;
 
   const top = model.scene.getObjectByName("仓库");
+
   top.traverse(function (obj) {
     if (obj.isMesh) {
       console.log(obj);
       obj.material.transparent = true;
-      obj.material.opacity = 0.1;
+      obj.material.opacity = isOpcityWarehouse.value ? 0.3 : 1;
     }
   });
-  // console.log(top);
-  // // top.visible = false;
+  flyMain();
 }
-function seeFire() {}
+function seeFire() {
+  inWarehouse();
+
+  if (!isAnimationPyramid.value) {
+    // open
+    isAnimationPyramid.value = true;
+    initPyramid();
+  } else {
+    isAnimationPyramid.value = false;
+
+    removePyramid();
+  }
+}
+function initPyramid() {
+  p1 = new Pyramid(new THREE.Vector3(-6, 11, 14));
+  scene.add(p1.mesh);
+  p2 = new Pyramid(new THREE.Vector3(24, 11, -20));
+  scene.add(p2.mesh);
+  p3 = new Pyramid(new THREE.Vector3(-10, 11, -70));
+  scene.add(p3.mesh);
+  p4 = new Pyramid(new THREE.Vector3(-24, 11, 68));
+  scene.add(p4.mesh);
+}
+function removePyramid() {
+  scene.remove(p1.mesh);
+  scene.remove(p2.mesh);
+  scene.remove(p3.mesh);
+  scene.remove(p4.mesh);
+}
 </script>
 
 <style lang="scss" scoped>
