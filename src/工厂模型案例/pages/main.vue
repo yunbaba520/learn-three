@@ -11,6 +11,9 @@
       <span class="btn" @click="seeFire">{{
         isAnimationPyramid ? "关闭消防设备" : "查看消防设备"
       }}</span>
+      <span class="btn" @click="changeCarStatus">{{
+        isCarRun ? "关闭货车运动" : "开始货车运动"
+      }}</span>
     </div>
     <div ref="canvesRef" class="canvas-wrap"></div>
     <ProgressBar v-model="progress"></ProgressBar>
@@ -66,6 +69,10 @@ const isFence = ref(false);
 let p1, p2, p3, p4;
 const isAnimationPyramid = ref(false); // 是否显示选择棱锥
 const isOpcityWarehouse = ref(false); // 仓库是否透明
+let car;
+let carPath;
+let carI = 0;
+const isCarRun = ref(false);
 const progress = ref(0); // 模型加载进度百分比0-1
 const infoBoxRef = ref(null);
 let infoBox;
@@ -90,6 +97,8 @@ function init() {
       // console.log('gltf对象场景属性',gltf.scene);
       // 返回的场景对象gltf.scene插入到threejs场景中
       scene.add(gltf.scene);
+      // car
+      initCar();
     },
     function (val) {
       // 加载一部分，就调用函数，可做模型加载进度条
@@ -109,6 +118,7 @@ function init() {
   ]);
   const fire = fireModel.init();
   scene.add(fire);
+
   // 相机
   camera = new THREE.PerspectiveCamera(
     75,
@@ -171,6 +181,9 @@ function animate() {
     p2.update();
     p3.update();
     p4.update();
+  }
+  if (isCarRun.value && carPath) {
+    carRun();
   }
   // renderer.render(scene, camera);
   labelRenderer.render(scene, camera);
@@ -356,6 +369,45 @@ function removePyramid() {
   scene.remove(p2.mesh);
   scene.remove(p3.mesh);
   scene.remove(p4.mesh);
+}
+function changeCarStatus() {
+  isCarRun.value = !isCarRun.value;
+}
+function initCar() {
+  // car
+  car = model.scene.getObjectByName("大货车");
+  car.add(createLabel(new THREE.Vector3(0, 5, 0), "货车A"));
+  const points = [
+    car.position.clone(),
+    new THREE.Vector3(-38, 1, 0),
+    new THREE.Vector3(-38, 1, -40),
+    new THREE.Vector3(-38, 1, -60),
+
+    new THREE.Vector3(-38, 1, -80),
+    new THREE.Vector3(-20, 1, -80),
+    new THREE.Vector3(0, 1, -80),
+    new THREE.Vector3(38, 1, -80),
+    new THREE.Vector3(38, 1, -40),
+    new THREE.Vector3(38, 1, 0),
+    new THREE.Vector3(38, 1, 40),
+    new THREE.Vector3(38, 1, 80),
+    new THREE.Vector3(0, 1, 80),
+    new THREE.Vector3(-38, 1, 80),
+    car.position.clone(),
+  ];
+  // 三维样条曲线
+  const path = new THREE.CatmullRomCurve3(points);
+  // 从曲线上等间距获取一定数量点坐标,点越多，相机运动越慢
+  carPath = path.getSpacedPoints(5500);
+}
+function carRun() {
+  if (carI < carPath.length - 2) {
+    carI += 1;
+  } else {
+    carI = 0;
+  }
+  car.position.copy(carPath[carI]);
+  car.lookAt(carPath[carI + 1]);
 }
 </script>
 
