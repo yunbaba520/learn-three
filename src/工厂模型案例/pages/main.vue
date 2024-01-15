@@ -344,7 +344,11 @@ function inWarehouse() {
     if (obj.isMesh) {
       console.log(obj);
       obj.material.transparent = true;
-      obj.material.opacity = isOpcityWarehouse.value ? 0.3 : 1;
+      obj.material.opacity = isOpcityWarehouse.value ? 0 : 1;
+      // if (obj.name === "低模铁皮") {
+      //   obj.material.transparent = true;
+      //   obj.material.opacity = isOpcityWarehouse.value ? 0 : 1;
+      // }
     }
   });
 }
