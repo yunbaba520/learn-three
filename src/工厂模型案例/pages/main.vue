@@ -17,6 +17,7 @@
       <span class="btn" @click="changeCarStatus">{{
         isCarRun ? "关闭货车运动" : "开始货车运动"
       }}</span>
+      <span class="btn" @click="openMeshLine">打开仓库模型边界线</span>
     </div>
     <div ref="canvesRef" class="canvas-wrap"></div>
     <ProgressBar v-model="progress"></ProgressBar>
@@ -99,7 +100,8 @@ function init() {
     function (gltf) {
       // console.log("控制台查看加载gltf文件返回的对象结构", gltf);
       model = gltf;
-      // console.log('gltf对象场景属性',gltf.scene);
+      console.log("gltf对象场景属性", gltf.scene);
+
       // 返回的场景对象gltf.scene插入到threejs场景中
       scene.add(gltf.scene);
       // car
@@ -430,6 +432,23 @@ function seeDevice() {
   inWarehouse();
 
   isSeeDevice.value = !isSeeDevice.value;
+}
+
+function openMeshLine() {
+  const m = model.scene.getObjectByName("仓库");
+  // 模型边界线
+  m.traverse(function (obj) {
+    if (obj.isMesh) {
+      obj.material.transparent = true;
+      obj.material.opacity = 0.3;
+      const edges = new THREE.EdgesGeometry(obj.geometry);
+      const edgesMaterial = new THREE.LineBasicMaterial({
+        color: 0x00ffff,
+      });
+      const line = new THREE.LineSegments(edges, edgesMaterial);
+      obj.add(line);
+    }
+  });
 }
 </script>
 
