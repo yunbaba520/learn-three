@@ -26,7 +26,8 @@ import router from "./工厂模型案例/router/index";
 // import App from "./22-旋转棱锥效果.vue";
 // import App from "./23-信号波.vue";
 // import App from "./24-渐变墙.vue";
-import App from "./工厂模型案例/app.vue";
+import App from "./25-添加文字与logo.vue";
+// import App from "./工厂模型案例/app.vue";
 
 const app = createApp(App);
 app.use(router);
