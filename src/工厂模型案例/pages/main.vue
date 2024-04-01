@@ -33,6 +33,8 @@ import TWEEN from "@tweenjs/tween.js";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import Stats from "three/addons/libs/stats.module.js";
 import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader";
+
 // 高光
 import { EffectComposer } from "three/addons/postprocessing/EffectComposer.js";
 import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
@@ -94,14 +96,35 @@ onMounted(() => {
 function init() {
   // 场景
   scene = new THREE.Scene();
+  // const c = new THREE.CubeTextureLoader().load(
+  //   `../src/assets/img/envMap.hdr`,
+  //   function (tex) {
+  //     console.log(tex);
+  //   },
+  //   undefined,
+  //   function (err) {
+  //     console.log("加载错误", err);
+  //   }
+  // );
+  // console.log(c);
+  // scene.background = c;
+  const g = new THREE.SphereGeometry(1000);
+  const m = new THREE.MeshBasicMaterial({
+    // color: 0xffff00,
+    map: new RGBELoader().load(`../src/assets/img/envMap.hdr`),
+    side: THREE.BackSide,
+  });
+  const sphere = new THREE.Mesh(g, m);
+  // 需要模型，没找到合适的，暂停
+  scene.add(sphere);
   // 模型
   new GLTFLoader().load(
     "../src/model/factory/工厂.glb",
     function (gltf) {
       // console.log("控制台查看加载gltf文件返回的对象结构", gltf);
       model = gltf;
-      console.log("gltf对象场景属性", gltf.scene);
-
+      // console.log("gltf对象场景属性", gltf.scene);
+      // gltf.scene.position.set(0, 0, 0);
       // 返回的场景对象gltf.scene插入到threejs场景中
       scene.add(gltf.scene);
       // car
@@ -134,7 +157,7 @@ function init() {
     75,
     canvasWidth / canvasHeight,
     0.1,
-    3000
+    300000
   );
   camera.position.set(-84, 78, 1.3);
   camera.lookAt(0, 0, 0);

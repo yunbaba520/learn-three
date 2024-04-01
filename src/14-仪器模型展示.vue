@@ -18,8 +18,6 @@ let renderer;
 let axesHelper;
 let cameraControls;
 
-let mesh;
-
 init();
 render();
 function init() {
@@ -44,8 +42,8 @@ function init() {
   light2.position.set(-300, -200, -200);
   scene.add(light2);
   // 坐标辅助对象
-  axesHelper = new THREE.AxesHelper(200);
-  scene.add(axesHelper);
+  // axesHelper = new THREE.AxesHelper(200);
+  // scene.add(axesHelper);
   console.log(scene);
   // 渲染器
   //antialias - 是否执行抗锯齿。默认为false.
