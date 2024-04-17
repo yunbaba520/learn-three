@@ -14,7 +14,7 @@ import router from "./工厂模型案例/router/index";
 // import App from "./11-室内环境.vue";
 // import App from "./12-正方体加图片实现全景看房.vue";
 // import App from "./13-电子围栏-纹理贴图.vue";
-import App from "./14-仪器模型展示.vue";
+// import App from "./14-仪器模型展示.vue";
 // import App from "./15-learn-数学几何计算基础.vue";
 // import App from "./16-模型扫光效果.vue";
 // import App from "./17-雷达扫描效果.vue";
@@ -28,6 +28,7 @@ import App from "./14-仪器模型展示.vue";
 // import App from "./24-渐变墙.vue";
 // import App from "./25-添加文字与logo.vue";
 // import App from "./26-雾化效果.vue";
+import App from "./27-人物行走.vue";
 // import App from "./工厂模型案例/app.vue";
 
 const app = createApp(App);
