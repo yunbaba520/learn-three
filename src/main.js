@@ -28,7 +28,8 @@ import router from "./工厂模型案例/router/index";
 // import App from "./24-渐变墙.vue";
 // import App from "./25-添加文字与logo.vue";
 // import App from "./26-雾化效果.vue";
-import App from "./27-人物行走.vue";
+// import App from "./27-人物行走.vue";
+import App from "./28-人物移动.vue";
 // import App from "./工厂模型案例/app.vue";
 
 const app = createApp(App);
