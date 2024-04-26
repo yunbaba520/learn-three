@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Canvas Circle Gradient</title>
+    <style>
+      body {
+        background-color: #000;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="myCanvas" width="200" height="200"></canvas>
+    <script>
+      // 获取canvas元素和绘图上下文
+      const canvas = document.getElementById("myCanvas");
+      const ctx = canvas.getContext("2d");
+
+      // 创建一个径向渐变
+      const gradient = ctx.createRadialGradient(
+        canvas.width / 2, // x坐标，圆心位置
+        canvas.height / 2, // y坐标，圆心位置
+        0, // 开始圆的半径
+        canvas.width / 2, // x坐标，外围圆位置
+        canvas.height / 2, // y坐标，外围圆位置
+        canvas.width / 2 // 结束圆的半径
+      );
+
+      // 添加颜色渐变
+      gradient.addColorStop(0, "rgba(255, 255, 255, 1)"); // 白色，完全不透明
+      gradient.addColorStop(1, "rgba(255, 255, 255, 0)"); // 白色，完全透明
+
+      // 填充渐变
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // 如果你想画一个圆圈的轮廓，可以取消注释以下代码
+      // ctx.beginPath();
+      // ctx.arc(canvas.width / 2, canvas.height / 2, canvas.width / 2, 0, Math.PI * 2);
+      // ctx.strokeStyle = 'black'; // 你可以设置轮廓的颜色
+      // ctx.lineWidth = 2; // 你可以设置轮廓的粗细
+      // ctx.stroke();
+    </script>
+  </body>
+</html>
