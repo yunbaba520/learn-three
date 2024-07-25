@@ -32,7 +32,10 @@ import router from "./工厂模型案例/router/index";
 // import App from "./28-人物移动.vue";
 // import App from "./29-模拟相机区域仿真人流.vue";
 // import App from "./30-3维热力图.vue";
-import App from "./31-人流足迹图.vue";
+// import App from "./31-人流足迹图.vue";
+// import App from "./32-相机可视域.vue";
+// import App from "./33-模型三维爆炸效果.vue";
+import App from "./34-模型动画.vue";
 // import App from "./工厂模型案例/app.vue";
 
 const app = createApp(App);
